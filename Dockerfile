@@ -1,13 +1,13 @@
 ## This Dockerfile is meant to aid in the building and debugging patroni whilst developing on your local machine
 ## It has all the necessary components to play/debug with a single node appliance, running etcd
-FROM postgres:9.6
+FROM postgres:10
 MAINTAINER Alexander Kukushkin <alexander.kukushkin@zalando.de>
 
 RUN export DEBIAN_FRONTEND=noninteractive \
     && echo 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";' > /etc/apt/apt.conf.d/01norecommend \
     && apt-get update -y \
     && apt-get upgrade -y \
-    && apt-get install -y curl jq haproxy python-psycopg2 python-yaml python-requests python-six python-pysocks \
+    && apt-get install -y curl jq haproxy python-psycopg2 python-yaml python-requests python-six python-socks \
         python-dateutil python-pip python-setuptools python-prettytable python-wheel python-psutil python locales \
 
     ## Make sure we have a en_US.UTF-8 locale available
