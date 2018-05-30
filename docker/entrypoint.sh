@@ -22,7 +22,7 @@ __EOF__
 
 DOCKER_IP=$(hostname --ip-address)
 PATRONI_SCOPE=${PATRONI_SCOPE:-batman}
-ETCD_ARGS="--data-dir /tmp/etcd.data -advertise-client-urls=http://${DOCKER_IP}:2379 -listen-client-urls=http://0.0.0.0:2379"
+ETCD_ARGS="--data-dir /tmp/etcd.data -advertise-client-urls=${ADVERTISE_CLIENT_URLS} -listen-client-urls=${LISTEN_CLIENT_URLS}"
 
 optspec=":vh-:"
 while getopts "$optspec" optchar; do
@@ -81,11 +81,11 @@ fi
 
 export PATRONI_SCOPE
 export PATRONI_NAME="${PATRONI_NAME:-${HOSTNAME}}"
-export PATRONI_RESTAPI_CONNECT_ADDRESS="${DOCKER_IP}:8008"
+export PATRONI_RESTAPI_CONNECT_ADDRESS="${RESTAPI_CONNECT_ADDRESS}"
 export PATRONI_RESTAPI_LISTEN="0.0.0.0:8008"
 export PATRONI_admin_PASSWORD="${PATRONI_admin_PASSWORD:=admin}"
 export PATRONI_admin_OPTIONS="${PATRONI_admin_OPTIONS:-createdb, createrole}"
-export PATRONI_POSTGRESQL_CONNECT_ADDRESS="${DOCKER_IP}:5432"
+export PATRONI_POSTGRESQL_CONNECT_ADDRESS="${POSTGRESQL_CONNECT_ADDRESS}"
 export PATRONI_POSTGRESQL_LISTEN="0.0.0.0:5432"
 export PATRONI_POSTGRESQL_DATA_DIR="data/${PATRONI_SCOPE}"
 export PATRONI_REPLICATION_USERNAME="${PATRONI_REPLICATION_USERNAME:-replicator}"
