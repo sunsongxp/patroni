@@ -102,7 +102,7 @@ bootstrap:
 
   pg_hba:
   - host all all 0.0.0.0/0 md5
-  - host replication replicator ${DOCKER_IP}/16    md5
+  - host replication replicator ${HOST_IP}/16    md5
 __EOF__
 
 mkdir -p "$HOME/.config/patroni"
