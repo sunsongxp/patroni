@@ -41,7 +41,14 @@ while getopts "$optspec" optchar; do
                         while ! curl -s ${PATRONI_ETCD_HOST}/v2/members | jq -r '.members[0].clientURLs[0]' | grep -q http; do
                             sleep 1
                         done
-                        exec $CONFD etcd -node $PATRONI_ETCD_HOST
+                        exec $CONFD etcd $(python <<EOF
+import json
+import os
+hosts_str = os.environ['PATRONI_ETCD_HOSTS']
+hosts_list = json.loads(hosts_str)
+" ".join(["-node %s" % item for item in hosts_list])
+EOF
+                            )
                     fi
                     ;;
                 etcd)
@@ -72,12 +79,6 @@ while getopts "$optspec" optchar; do
             ;;
     esac
 done
-
-## We start an etcd
-if [[ -z ${PATRONI_ETCD_HOST} && -z ${PATRONI_ZOOKEEPER_HOSTS} ]]; then
-    etcd $ETCD_ARGS > /var/log/etcd.log 2> /var/log/etcd.err &
-    export PATRONI_ETCD_HOST="127.0.0.1:2379"
-fi
 
 export PATRONI_SCOPE
 export PATRONI_NAME="${PATRONI_NAME:-${HOSTNAME}}"
