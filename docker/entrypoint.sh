@@ -42,7 +42,7 @@ while getopts "$optspec" optchar; do
 import yaml
 import os
 hosts_str = os.environ['PATRONI_ETCD_HOSTS']
-hosts_list = yaml.safe_load("[{0}]" % hosts_str)
+hosts_list = yaml.safe_load("[{0}]".format(hosts_str))
 print(hosts_list[0])
 EOF
                             )
@@ -53,7 +53,7 @@ EOF
 import yaml
 import os
 hosts_str = os.environ['PATRONI_ETCD_HOSTS']
-hosts_list = yaml.safe_load("[{0}]" % hosts_str)
+hosts_list = yaml.safe_load("[{0}]".format(hosts_str))
 print(" ".join(["-node %s" % item for item in hosts_list]))
 EOF
                             )
