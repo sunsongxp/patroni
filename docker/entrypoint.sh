@@ -38,7 +38,15 @@ while getopts "$optspec" optchar; do
                         done
                         exec $CONFD zookeeper -node ${PATRONI_ZOOKEEPER_HOSTS}
                     else
-                        while ! curl -s ${PATRONI_ETCD_HOST}/v2/members | jq -r '.members[0].clientURLs[0]' | grep -q http; do
+                        FIRST_ETCD_HOST=$(python <<EOF
+import json
+import os
+hosts_str = os.environ['PATRONI_ETCD_HOSTS']
+hosts_list = json.loads(hosts_str)
+print(hosts_list[0])
+EOF
+                            )
+                        while ! curl -s ${FIRST_ETCD_HOST}/v2/members | jq -r '.members[0].clientURLs[0]' | grep -q http; do
                             sleep 1
                         done
                         exec $CONFD etcd $(python <<EOF
@@ -46,7 +54,7 @@ import json
 import os
 hosts_str = os.environ['PATRONI_ETCD_HOSTS']
 hosts_list = json.loads(hosts_str)
-" ".join(["-node %s" % item for item in hosts_list])
+print(" ".join(["-node %s" % item for item in hosts_list]))
 EOF
                             )
                     fi
