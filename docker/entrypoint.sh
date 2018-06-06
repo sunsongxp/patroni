@@ -39,7 +39,7 @@ while getopts "$optspec" optchar; do
                         exec $CONFD zookeeper -node ${PATRONI_ZOOKEEPER_HOSTS}
                     else
                         FIRST_ETCD_HOST=$(python <<EOF
-import json
+import yaml
 import os
 hosts_str = os.environ['PATRONI_ETCD_HOSTS']
 hosts_list = yaml.safe_load("[{0}]" % hosts_str)
@@ -50,7 +50,7 @@ EOF
                             sleep 1
                         done
                         exec $CONFD etcd $(python <<EOF
-import json
+import yaml
 import os
 hosts_str = os.environ['PATRONI_ETCD_HOSTS']
 hosts_list = yaml.safe_load("[{0}]" % hosts_str)
