@@ -277,6 +277,7 @@ class Config(object):
         if users:
             ret['bootstrap']['users'] = users
 
+        logger.info(ret)
         return ret
 
     def _build_effective_configuration(self, dynamic_configuration, local_configuration):
